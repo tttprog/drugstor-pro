@@ -1,10 +1,34 @@
 <template>
+  <UiNavbar class="hidden lg:flex">
+    <UiContainer class="flex h-14 items-center justify-between">
+      <NuxtLink to="#" class="flex items-center gap-3">
+        <span
+          class="lg:text-lg bg-gradient-to-r from-red-500 via-green-500 to-blue-500 bg-[length:600%_600%] bg-clip-text text-transparent animate-gradient font-bold">آنلاین
+          شاپ فارم الی</span>
+      </NuxtLink>
+      <nav class="hidden items-center gap-5 sm:flex">
+        <UiButton to="#" variant="ghost" size="sm">ورود </UiButton>
+        <UiButton class="relative overflow-hidden" size="lg" variant="outline">
+          ثبت نام
+          <UiBorderBeam :size="40" :initial-offset="20" class="from-transparent via-yellow-500 to-transparent"
+            :transition="{
+              type: 'spring',
+              stiffness: 60,
+              damping: 20,
+            }" />
+        </UiButton>
+        <UiButton variant="ghost" @click="$colorMode.preference = $colorMode.value === 'dark' ? 'light' : 'dark'">
+          <Icon :name="$colorMode.preference === 'dark' ? 'lucide:sun' : 'lucide:moon'" class="size-4" />
+        </UiButton>
+      </nav>
+    </UiContainer>
+  </UiNavbar>
   <header class="z-20 border-b bg-background/90 backdrop-blur">
     <UiContainer class="flex h-16 items-center justify-between lg:h-20">
-      <div class="flex items-center gap-10">
-        <NuxtLink to="#" class="flex items-center gap-3">
+      <div class="flex items-center gap-10 w-full lg:w-auto">
+        <NuxtLink to="#" class="flex items-center gap-3 lg:hidden">
           <span
-            class="font-semibold lg:text-lg bg-gradient-to-r from-red-500 via-green-500 to-blue-500 bg-[length:600%_600%] bg-clip-text text-transparent animate-gradient">آنلاین
+            class="lg:text-lg bg-gradient-to-r from-red-500 via-green-500 to-blue-500 bg-[length:600%_600%] bg-clip-text text-transparent animate-gradient font-bold">آنلاین
             شاپ فارم الی</span>
         </NuxtLink>
         <UiNavigationMenu as="nav" class="hidden items-center justify-start gap-8 lg:flex">
@@ -52,6 +76,37 @@
             </UiNavigationMenuItem>
           </UiNavigationMenuList>
         </UiNavigationMenu>
+      </div>
+      <div class="w-96">
+        <form action="#" method="get"
+          class="items-center gap-3 border border-gray-200 dark:border-gray-800 p-2 rounded-2xl hidden lg:flex">
+          <UiInput type="text" placeholder="جستوجو کنید..." class="border border-none shadow-none" />
+          <UiButton variant="secondary">
+            <Icon name="lucide:search" />
+          </UiButton>
+        </form>
+      </div>
+      <div class="lg:hidden">
+        <UiDialog v-model:open="dialog">
+          <UiDialogTrigger as-child>
+            <UiButton variant="secondary">
+              <Icon name="lucide:search" />
+            </UiButton>
+          </UiDialogTrigger>
+
+          <UiDialogContent class="sm:max-w-[425px]">
+            <template #content>
+              <div class="grid gap-4 py-4">
+                <div class="flex items-center gap-3">
+                  <UiInput id="search" type="text" class="col-span-3" placeholder="نام محصول، برند و ..." />
+                  <UiButton variant="secondary">
+                    <Icon name="lucide:search" />
+                  </UiButton>
+                </div>
+              </div>
+            </template>
+          </UiDialogContent>
+        </UiDialog>
       </div>
       <div class="lg:hidden">
         <UiSheet>
@@ -111,16 +166,7 @@
                       </li>
                     </ul>
                     <UiGradientDivider class="my-5" />
-                    <UiButton to="#" variant="ghost" size="sm">ورود </UiButton>
-                    <UiButton class="relative overflow-hidden" size="lg" variant="outline">
-                      ثبت نام
-                      <UiBorderBeam :size="40" :initial-offset="20"
-                        class="from-transparent via-yellow-500 to-transparent" :transition="{
-                          type: 'spring',
-                          stiffness: 60,
-                          damping: 20,
-                        }" />
-                    </UiButton>
+
 
                   </div>
                 </UiScrollArea>
@@ -140,35 +186,15 @@
           </UiSheetTrigger>
         </UiSheet>
       </div>
-      <div class="hidden items-center gap-3 lg:flex">
-        <UiButton to="#" variant="ghost" size="sm">ورود </UiButton>
-        <UiButton class="relative overflow-hidden" size="lg" variant="outline">
-          ثبت نام
-          <UiBorderBeam :size="40" :initial-offset="20" class="from-transparent via-yellow-500 to-transparent"
-            :transition="{
-              type: 'spring',
-              stiffness: 60,
-              damping: 20,
-            }" />
-        </UiButton>
-        <UiSelect default-value="1" v-model="$colorMode.preference">
-          <UiSelectTrigger>
-            <UiSelectValue />
-          </UiSelectTrigger>
-          <UiSelectContent>
-            <UiSelectItem v-for="(item, i) in colorModeOptions" :key="i" :value="item?.value">
-              {{
-                item.label
-              }}</UiSelectItem>
-          </UiSelectContent>
-        </UiSelect>
-      </div>
     </UiContainer>
   </header>
 
 </template>
 
 <script lang="ts" setup>
+
+const dialog = ref(false);
+
 const miniLinks = [
   { name: "محصولات محبوب", href: "#" },
   { name: "اخبار و مقالات", href: "#" },
